@@ -5,32 +5,34 @@ const CustomCursor = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  // Use motion values for smoother performance
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
+  const mouseX = useMotionValue(-200);
+  const mouseY = useMotionValue(-200);
 
-  // Spring configuration for that organic, fluid feel
-  const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
-  const cursorXSpring = useSpring(cursorX, springConfig);
-  const cursorYSpring = useSpring(cursorY, springConfig);
+  // Dot follows instantly
+  const dotX = useSpring(mouseX, { damping: 50, stiffness: 900, mass: 0.1 });
+  const dotY = useSpring(mouseY, { damping: 50, stiffness: 900, mass: 0.1 });
+
+  // Glow orb lags behind
+  const orbX = useSpring(mouseX, { damping: 30, stiffness: 120, mass: 0.8 });
+  const orbY = useSpring(mouseY, { damping: 30, stiffness: 120, mass: 0.8 });
 
   useEffect(() => {
-    // Check if it's a touch device
     if (window.matchMedia('(pointer: coarse)').matches) return;
     setIsVisible(true);
 
-    const updateMousePosition = (e) => {
-      cursorX.set(e.clientX - 10);
-      cursorY.set(e.clientY - 10);
+    const move = (e) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
     };
 
-    const handleMouseOver = (e) => {
+    const over = (e) => {
+      const el = e.target;
       if (
-        e.target.tagName.toLowerCase() === 'a' ||
-        e.target.tagName.toLowerCase() === 'button' ||
-        e.target.closest('a') ||
-        e.target.closest('button') ||
-        e.target.closest('.magnetic')
+        el.tagName.toLowerCase() === 'a' ||
+        el.tagName.toLowerCase() === 'button' ||
+        el.closest('a') ||
+        el.closest('button') ||
+        el.closest('.magnetic')
       ) {
         setIsHovering(true);
       } else {
@@ -38,32 +40,88 @@ const CustomCursor = () => {
       }
     };
 
-    window.addEventListener('mousemove', updateMousePosition);
-    window.addEventListener('mouseover', handleMouseOver);
-
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseover', over);
     return () => {
-      window.removeEventListener('mousemove', updateMousePosition);
-      window.removeEventListener('mouseover', handleMouseOver);
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseover', over);
     };
-  }, [cursorX, cursorY]);
+  }, [mouseX, mouseY]);
 
   if (!isVisible) return null;
 
   return (
-    <motion.div
-      className="custom-cursor"
-      style={{
-        x: cursorXSpring,
-        y: cursorYSpring,
-      }}
-      animate={{
-        scale: isHovering ? 2.5 : 1,
-        opacity: isHovering ? 0.8 : 1,
-      }}
-      transition={{
-        scale: { type: 'spring', stiffness: 300, damping: 20 },
-      }}
-    />
+    <>
+      {/* Glowing orb — lags behind */}
+      <motion.div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          x: orbX,
+          y: orbY,
+          translateX: '-50%',
+          translateY: '-50%',
+          pointerEvents: 'none',
+          zIndex: 9997,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(120,120,120,0.35) 0%, transparent 70%)',
+        }}
+        animate={{
+          width: isHovering ? 90 : 55,
+          height: isHovering ? 90 : 55,
+          opacity: isHovering ? 0.6 : 0.45,
+        }}
+        transition={{ duration: 0.25 }}
+      />
+
+      {/* Sharp center dot */}
+      <motion.div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          x: dotX,
+          y: dotY,
+          translateX: '-50%',
+          translateY: '-50%',
+          pointerEvents: 'none',
+          zIndex: 9999,
+          borderRadius: '50%',
+          backgroundColor: 'var(--text-color)',
+        }}
+        animate={{
+          width: isHovering ? 6 : 5,
+          height: isHovering ? 6 : 5,
+          opacity: isHovering ? 0.6 : 1,
+        }}
+        transition={{ duration: 0.15 }}
+      />
+
+      {/* Thin outline ring */}
+      <motion.div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          x: dotX,
+          y: dotY,
+          translateX: '-50%',
+          translateY: '-50%',
+          pointerEvents: 'none',
+          zIndex: 9998,
+          borderRadius: '50%',
+          border: '1.5px solid var(--text-color)',
+          opacity: 0.5,
+        }}
+        animate={{
+          width: isHovering ? 40 : 28,
+          height: isHovering ? 40 : 28,
+          opacity: isHovering ? 0.3 : 0.5,
+        }}
+        transition={{ duration: 0.2 }}
+      />
+    </>
   );
 };
 

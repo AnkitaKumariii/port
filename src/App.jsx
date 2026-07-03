@@ -7,6 +7,9 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ThemeToggle from './components/ThemeToggle';
 import CustomCursor from './components/CustomCursor';
+import Contributions from './components/Contributions';
+import Skills from './components/Skills';
+import Navbar from './components/Navbar';
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -18,11 +21,13 @@ function App() {
         className="progress-bar"
         style={{ scaleX: scrollYProgress }}
       />
+      <Navbar />
       <div id="top"></div>
-      <ThemeToggle />
       <Hero />
       <About />
+      <Skills />
       <Projects />
+      <Contributions />
       <Contact />
       <Footer />
     </>
