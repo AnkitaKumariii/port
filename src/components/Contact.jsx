@@ -54,8 +54,25 @@ const Contact = () => {
         >
           <motion.div className="contact-header" variants={itemVariants}>
             <p className="contact-overline">What's Next?</p>
-            <h2 className="contact-title">Get In Touch</h2>
-            <p className="contact-description">
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <h2 className="contact-title" style={{ marginBottom: '1.5rem' }}>Get In Touch</h2>
+              {/* Paper Airplane Doodle */}
+              <motion.div
+                initial={{ opacity: 0, x: -30, y: 30, rotate: -30 }}
+                whileInView={{ opacity: 0.7, x: 0, y: 0, rotate: 15 }}
+                transition={{ type: 'spring', duration: 1.2, delay: 0.6 }}
+                style={{ position: 'absolute', right: '-55px', top: '-25px', color: 'var(--accent-color)' }}
+              >
+                <svg width="50" height="50" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M 10 50 L 90 10 L 50 90 L 40 60 Z" />
+                  <path d="M 90 10 L 40 60" />
+                  <path d="M 40 60 L 30 80 L 35 65" />
+                  {/* Trail */}
+                  <path d="M -10 70 Q 0 65, 5 55" strokeDasharray="3 4" strokeWidth="3" />
+                </svg>
+              </motion.div>
+            </div>
+            <p className="contact-description" style={{ marginTop: '0' }}>
               Although I'm not currently looking for any new opportunities, my inbox is always open. 
               Whether you have a question or just want to say hi, I'll try my best to get back to you!
             </p>

@@ -147,9 +147,35 @@ const Contributions = () => {
       viewport={{ once: true, margin: '-100px' }}
     >
       <div className="container">
-        <div className="contributions-header">
-          <h2>Contributions</h2>
-          <p className="contributions-subtitle">Open-source contributions and community involvement.</p>
+        <div className="contributions-header-wrapper" style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <h2 style={{ marginBottom: 0 }}>Contributions</h2>
+            
+            {/* Heart Doodle (Open Source Love) */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0, rotate: -20 }}
+              whileInView={{ opacity: 0.8, scale: 1, rotate: 10 }}
+              transition={{ type: 'spring', duration: 1, delay: 0.5 }}
+              style={{ position: 'absolute', right: '-45px', top: '-15px', color: '#ff4b4b' }}
+            >
+              <svg width="35" height="35" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M50 85 C 50 85, 15 55, 15 30 C 15 15, 30 10, 45 20 C 50 25, 50 25, 50 25 C 50 25, 50 25, 55 20 C 70 10, 85 15, 85 30 C 85 55, 50 85, 50 85 Z" />
+              </svg>
+            </motion.div>
+
+            {/* Plus Doodle (Adding Value) */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0, rotate: 45 }}
+              whileInView={{ opacity: 0.5, scale: 1, rotate: -10 }}
+              transition={{ type: 'spring', duration: 1, delay: 0.7 }}
+              style={{ position: 'absolute', left: '-40px', bottom: '0px', color: 'var(--accent-color)' }}
+            >
+              <svg width="25" height="25" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round">
+                <path d="M 50 15 L 50 85 M 15 50 L 85 50" />
+              </svg>
+            </motion.div>
+          </div>
+          <p className="contributions-subtitle" style={{ marginTop: '1rem' }}>Open-source contributions and community involvement.</p>
         </div>
 
         {loading ? (
