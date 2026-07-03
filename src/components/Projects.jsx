@@ -1,72 +1,42 @@
-import React, { useRef } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2
-    }
-  }
-};
-
-const ProjectCard = ({ title, description }) => {
-  const ref = useRef(null);
-  
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 20 });
-  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 20 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
-
-  const handleMouseMove = (e) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    
-    const width = rect.width;
-    const height = rect.height;
-    
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
+const FeaturedProject = ({ title, description, techList, alignRight, imgSrc, imgAlt }) => {
   return (
-    <motion.a
-      href="#!"
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="project-item magnetic"
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-      }}
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-      }}
+    <motion.div 
+      className={`featured-project ${alignRight ? 'align-right' : ''}`}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      viewport={{ once: true, margin: "-50px" }}
     >
-      <motion.div style={{ transform: "translateZ(30px)" }}>
-        <h3>{title}</h3>
-        <p>{description}</p>
-      </motion.div>
-    </motion.a>
+      <div className="project-image-container">
+        <a href="#!" className="project-image-link">
+          <div className="image-overlay"></div>
+          <img src={imgSrc} alt={imgAlt} className="project-image" />
+        </a>
+      </div>
+      <div className="project-content-container">
+        <p className="project-overline font-mono">Featured Project</p>
+        <h3 className="project-title">{title}</h3>
+        <div className="project-description">
+          <p>{description}</p>
+        </div>
+        <ul className="project-tech-list font-mono">
+          {techList.map((tech, i) => (
+            <li key={i}>{tech}</li>
+          ))}
+        </ul>
+        <div className="project-links">
+          <a href="#!" aria-label="GitHub Link">
+            <svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-github"><title>GitHub</title><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          </a>
+          <a href="#!" aria-label="External Link">
+            <svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-external-link"><title>External Link</title><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 
@@ -80,27 +50,25 @@ const Projects = () => {
       viewport={{ once: true, margin: "-100px" }}
     >
       <div className="container">
-        <h2>Projects</h2>
-        <motion.div 
-          className="projects-grid"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-        >
-          <ProjectCard 
-            title="Project One" 
-            description="A minimalist web application built with React and Vite." 
+        <h2>Some Things I've Built</h2>
+        <div className="featured-projects-list">
+          <FeaturedProject 
+            title="StrongApe – Fitness Accountability Buddy" 
+            description="A full-stack gamified fitness platform with real-time social features, XP tracking, and custom UI animations to keep users engaged and motivated." 
+            techList={["React", "FastAPI", "WebSockets", "PostgreSQL", "TailwindCSS"]}
+            imgSrc="/strongape_preview.png"
+            imgAlt="StrongApe Gamified Fitness Dashboard"
+            alignRight={false}
           />
-          <ProjectCard 
-            title="Project Two" 
-            description="An open-source tool for optimizing developer workflows." 
+          <FeaturedProject 
+            title="LabelX – Food Label Analyzer AI Agent" 
+            description="A full-stack AI food safety analyzer using a multi-agent LangGraph workflow. Includes vector search infrastructure, OCR, and a personalized health scoring engine." 
+            techList={["React", "FastAPI", "LangGraph", "Qdrant", "Gemini Vision"]}
+            imgSrc="/labelx_preview.png"
+            imgAlt="LabelX AI Food Analyzer App"
+            alignRight={true}
           />
-          <ProjectCard 
-            title="Project Three" 
-            description="A beautiful, dark-themed dashboard interface." 
-          />
-        </motion.div>
+        </div>
       </div>
     </motion.section>
   );
