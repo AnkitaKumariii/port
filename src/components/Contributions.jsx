@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import TiltWrapper from './TiltWrapper';
 
 const GITHUB_USERNAME = 'AnkitaKumariii';
 
@@ -44,48 +45,54 @@ const ContribCard = ({ repo, index }) => {
   const orgName = repo.fork && repo.parent ? repo.parent.owner.login : repo.owner.login;
 
   return (
-    <motion.a
-      href={repo.html_url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="contrib-card"
+    <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.08, ease: 'easeOut' }}
       viewport={{ once: true, margin: '-40px' }}
+      style={{ display: 'block', height: '100%' }}
     >
-      <div className="contrib-card-header">
-        <span className="contrib-repo-icon"><RepoIcon /></span>
-        <span className="contrib-repo-name">{repo.name}</span>
-        <span className="contrib-fork-icon"><ForkIcon /></span>
-      </div>
+      <TiltWrapper options={{ max: 15, scale: 1.03 }}>
+        <a
+          href={repo.html_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="contrib-card"
+        >
+          <div className="contrib-card-header">
+            <span className="contrib-repo-icon"><RepoIcon /></span>
+            <span className="contrib-repo-name">{repo.name}</span>
+            <span className="contrib-fork-icon"><ForkIcon /></span>
+          </div>
 
-      <p className="contrib-description">
-        {repo.description || 'No description provided.'}
-      </p>
+          <p className="contrib-description">
+            {repo.description || 'No description provided.'}
+          </p>
 
-      <div className="contrib-card-footer">
-        <span className="contrib-owner">
-          <RepoIcon />
-          {orgName}
-        </span>
-        <div className="contrib-meta">
-          {repo.language && (
-            <span className="contrib-lang">
-              <span className="lang-dot" style={{ background: langColor }} />
-              {repo.language}
+          <div className="contrib-card-footer">
+            <span className="contrib-owner">
+              <RepoIcon />
+              {orgName}
             </span>
-          )}
-          {repo.stargazers_count > 0 && (
-            <span className="contrib-stars">
-              <StarIcon /> {repo.stargazers_count}
-            </span>
-          )}
-        </div>
-      </div>
+            <div className="contrib-meta">
+              {repo.language && (
+                <span className="contrib-lang">
+                  <span className="lang-dot" style={{ background: langColor }} />
+                  {repo.language}
+                </span>
+              )}
+              {repo.stargazers_count > 0 && (
+                <span className="contrib-stars">
+                  <StarIcon /> {repo.stargazers_count}
+                </span>
+              )}
+            </div>
+          </div>
 
-      <span className="contrib-external"><ExternalIcon /></span>
-    </motion.a>
+          <span className="contrib-external"><ExternalIcon /></span>
+        </a>
+      </TiltWrapper>
+    </motion.div>
   );
 };
 

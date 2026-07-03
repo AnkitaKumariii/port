@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import TiltWrapper from './TiltWrapper';
 
 const FeaturedProject = ({ title, description, techList, alignRight, imgSrc, imgAlt }) => {
   return (
@@ -10,12 +11,12 @@ const FeaturedProject = ({ title, description, techList, alignRight, imgSrc, img
       transition={{ duration: 0.7, ease: "easeOut" }}
       viewport={{ once: true, margin: "-50px" }}
     >
-      <div className="project-image-container">
+      <TiltWrapper className="project-image-container" options={{ max: 10, scale: 1.05 }}>
         <a href="#!" className="project-image-link">
           <div className="image-overlay"></div>
           <img src={imgSrc} alt={imgAlt} className="project-image" />
         </a>
-      </div>
+      </TiltWrapper>
       <div className="project-content-container">
         <p className="project-overline font-mono">Featured Project</p>
         <h3 className="project-title">{title}</h3>
